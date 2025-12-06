@@ -129,12 +129,12 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   // Add chatbot widget script
-  // scripts: [
-  //   {
-  //     src: '/chatbot-widget-v2.js',
-  //     async: true,
-  //   },
-  // ],
+  scripts: [
+    {
+      src: '/chatbot-widget-v2.js',
+      async: true,
+    },
+  ],
 };
 
 export default config;
