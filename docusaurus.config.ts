@@ -8,9 +8,9 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://physical-ai-book.vercel.app',
+  url: 'https://zubairxshah.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/',
+  baseUrl: '/physical-ai-book/',
 
   // GitHub pages deployment config.
   organizationName: 'zubairxshah', // Usually your GitHub org/user name.
