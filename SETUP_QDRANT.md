@@ -32,15 +32,7 @@ After cluster is created (takes 1-2 minutes):
 
 Open `backend/.env` and update:
 
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-QDRANT_URL=https://YOUR-CLUSTER-ID.us-east4-0.gcp.cloud.qdrant.io:6333
-QDRANT_API_KEY=YOUR_API_KEY_HERE
-```
-
-Replace:
-- `YOUR-CLUSTER-ID` with your actual cluster URL
-- `YOUR_API_KEY_HERE` with your actual API key
+https://i.ibb.co/1Y3VmFzY/image.png
 
 ## Step 5: Test Connection
 
