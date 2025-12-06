@@ -8,9 +8,9 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://zubairxshah.github.io',
+  url: 'https://physical-ai-book.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/physical-ai-book/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'zubairxshah', // Usually your GitHub org/user name.
@@ -131,7 +131,7 @@ const config: Config = {
   // Add chatbot widget script
   scripts: [
     {
-      src: '/physical-ai-book/chatbot-widget-v2.js',
+      src: '/chatbot-widget-v2.js',
       async: true,
     },
   ],
