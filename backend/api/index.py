@@ -5,5 +5,6 @@ backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
 
 from main_simple import app
+from mangum import Mangum
 
-handler = app
+handler = Mangum(app)
