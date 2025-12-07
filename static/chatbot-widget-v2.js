@@ -6,7 +6,7 @@ window.addEventListener('load', function() {
     console.log('✅ Window loaded, initializing chatbot...');
     
     // Configuration
-    const API_URL = 'https://physical-ai-book-api.vercel.app/'; // UPDATE THIS after deploying backend
+    const API_URL = 'https://physical-ai-book-backend.vercel.app'; // UPDATE THIS after deploying backend
     let selectedText = '';
     
     // Create widget

@@ -129,12 +129,12 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   // Chatbot disabled - deploy backend first, then uncomment and update API_URL
-  // scripts: [
-  //   {
-  //     src: '/chatbot-widget-v2.js',
-  //     async: true,
-  //   },
-  // ],
+  scripts: [
+    {
+      src: '/chatbot-widget-v2.js',
+      async: true,
+    },
+  ],
 };
 
 export default config;

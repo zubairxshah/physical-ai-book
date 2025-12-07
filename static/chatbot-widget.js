@@ -1,7 +1,8 @@
 // Chatbot Widget for Physical AI Book
 (function() {
     // Configuration - CHANGE THIS to your deployed API URL
-    const API_URL = 'http://localhost:8000';
+    // const API_URL = 'http://localhost:8000';
+    const API_URL = 'https://physical-ai-book-backend.vercel.app';
     
     // State
     let selectedText = '';
