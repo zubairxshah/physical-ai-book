@@ -35,7 +35,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          routeBasePath: '/', // Makes docs the home page
+          routeBasePath: 'docs', // Docs at /docs, custom home page at /
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
@@ -128,11 +128,34 @@ const config: Config = {
     },
   } satisfies Preset.ThemeConfig,
 
-  // Chatbot disabled - deploy backend first, then uncomment and update API_URL
+  // RAG Chatbot with Qdrant + Neon Postgres
   scripts: [
     {
-      src: '/chatbot-widget-v2.js',
+      src: '/chatbot-widget-v3.js',
       async: true,
+    },
+  ],
+
+  // Custom webpack config for dev server proxy
+  plugins: [
+    function docusaurusDevServerProxy(context, options) {
+      return {
+        name: 'docusaurus-dev-server-proxy',
+        configureWebpack(config, isServer) {
+          if (!isServer && config.devServer) {
+            config.devServer.proxy = [
+              {
+                context: ['/api'],
+                target: 'http://localhost:8000',
+                changeOrigin: true,
+                secure: false,
+                logLevel: 'debug',
+              },
+            ];
+          }
+          return {};
+        },
+      };
     },
   ],
 };

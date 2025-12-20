@@ -21,18 +21,48 @@ This project was built for the GIAIC AI/Spec-Driven Online Hackathon. It demonst
 ## 🚀 Features
 
 ### Core Features
-✅ **Complete Book** - 12 comprehensive chapters on Physical AI and Humanoid Robotics  
-✅ **RAG Chatbot** - Retrieval-Augmented Generation using vector database  
-✅ **Text Selection** - Highlight any text and ask questions about it  
-✅ **Source Citations** - Every answer includes relevant chapter references  
-✅ **Responsive Design** - Works on desktop and mobile  
+✅ **Complete Book** - 18 chapters on Physical AI and Humanoid Robotics
+✅ **RAG Chatbot** - Retrieval-Augmented Generation using vector database
+✅ **Skills & Subagents** - 5 reusable Claude Code intelligence artifacts
+✅ **Authentication System** - Better-auth with user background questionnaires
+✅ **Content Personalization** - Experience-based tooltip definitions
+✅ **Urdu Translation** - GPT-4 powered translation with caching
+✅ **Source Citations** - Every answer includes relevant chapter references
+✅ **Responsive Design** - Works on desktop and mobile
 
 ### Technology Stack
-- **Frontend**: Docusaurus 3.9, React, TypeScript
-- **Backend**: FastAPI, Python 3.11
+- **Frontend**: Docusaurus 3.6, React, TypeScript
+- **Backend**: Node.js (Express), FastAPI (Python)
+- **Auth**: Better-auth, PostgreSQL (Neon), Bcrypt
 - **AI/ML**: OpenAI GPT-4, text-embedding-3-small
 - **Vector DB**: Qdrant Cloud (free tier)
-- **Deployment**: GitHub Pages + Render.com
+- **Database**: Neon Serverless PostgreSQL
+- **Deployment**: Vercel (frontend + serverless functions)
+
+---
+
+## ⚠️ IMPORTANT: Running the Project
+
+**This project requires MULTIPLE servers running simultaneously!**
+
+See **[START_SERVERS.md](START_SERVERS.md)** for complete setup instructions.
+
+**Quick Start:**
+```bash
+# Terminal 1 - Frontend
+npm start
+
+# Terminal 2 - Auth Server (Required for login/signup)
+node auth-server.js
+
+# Terminal 3 - Personalization API (Required for tooltips)
+python backend/personalization_api.py
+
+# Terminal 4 - Translation API (Required for Urdu translation)
+python backend/translation_api.py
+```
+
+**Note:** If you only run `npm start`, authentication and advanced features won't work!
 
 ---
 
@@ -156,10 +186,18 @@ physical-ai-book/
 - Spec-driven development approach
 - Iterative refinement of chapters
 
-### Subagents & Skills (If implemented)
-- Content Generator Subagent
-- Documentation Skill
-- Research Summarization Skill
+### Subagents & Skills (Implemented)
+
+**3 Reusable Skills** - Domain-specific intelligence artifacts:
+- **Content Generation Skill** - Generates educational technical content following book style guidelines
+- **RAG Query Testing Skill** - Validates chatbot accuracy and source attribution
+- **Robotics Code Generator Skill** - Creates production-quality ROS 2, control, and vision code
+
+**2 Specialized Subagents** - Autonomous task executors:
+- **Technical Reviewer Subagent** - Reviews code and content for accuracy, safety, and best practices
+- **Documentation Generator Subagent** - Auto-generates API docs, setup guides, and troubleshooting docs
+
+All skills and subagents are located in `.claude/skills/` and `.claude/subagents/` directories with comprehensive documentation and usage examples.
 
 ---
 

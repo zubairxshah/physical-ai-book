@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.better-auth.com)",
+      "Bash(cat:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(ren:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(npm start)",
+      "Bash(del \"D:\\\\prompteng\\\\hackathon\\\\physical-ai-book\\\\docs\\\\chapter1.md\")"
+    ]
+  }
+}

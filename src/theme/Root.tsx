@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { PersonalizationProvider } from '../context/PersonalizationContext';
 
 export default function Root({children}) {
   useEffect(() => {
@@ -8,11 +9,10 @@ export default function Root({children}) {
       script.src = '/physical-ai-book/chatbot-widget-v2.js';
       script.async = false; // Load synchronously to ensure DOM is ready
       script.onload = () => {
-        console.log('✅ Chatbot widget loaded successfully');
-        console.log('Click the 💬 button to open chat');
+        console.log('Chatbot widget loaded successfully');
       };
       script.onerror = (error) => {
-        console.error('❌ Failed to load chatbot widget:', error);
+        console.error('Failed to load chatbot widget:', error);
       };
       document.body.appendChild(script);
     };
@@ -26,5 +26,9 @@ export default function Root({children}) {
     }
   }, []);
 
-  return <>{children}</>;
+  return (
+    <PersonalizationProvider>
+      {children}
+    </PersonalizationProvider>
+  );
 }

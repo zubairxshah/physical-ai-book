@@ -1,5 +1,70 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "build",
-  "installCommand": "npm install --force"
+  "installCommand": "npm install --force",
+  "framework": "docusaurus",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 512,
+      "maxDuration": 10
+    },
+    "api/**/*.py": {
+      "runtime": "python3.11",
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/auth/(.*)",
+      "destination": "/api/auth/[...all].ts"
+    },
+    {
+      "source": "/api/personalization/(.*)",
+      "destination": "/api/personalization.py"
+    },
+    {
+      "source": "/api/translation/(.*)",
+      "destination": "/api/translation.py"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "BETTER_AUTH_SECRET": "@better-auth-secret",
+    "BETTER_AUTH_URL": "@better-auth-url",
+    "OPENAI_API_KEY": "@openai-api-key",
+    "QDRANT_URL": "@qdrant-url",
+    "QDRANT_API_KEY": "@qdrant-api-key",
+    "OPENROUTER_API_KEY": "@openrouter-api-key",
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+        }
+      ]
+    }
+  ]
 }

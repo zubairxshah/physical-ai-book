@@ -1,0 +1,19 @@
+# RAG Chatbot Requirements
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+openai==1.55.3  # For embeddings (can use OpenRouter compatible format)
+python-dotenv==1.0.1
+pydantic==2.10.3
+mangum==0.17.0
+
+# Vector Database
+qdrant-client==1.12.1
+
+# PostgreSQL
+psycopg2-binary==2.9.10
+asyncpg==0.29.0
+sqlalchemy==2.0.36
+
+# HTTP client for OpenRouter
+httpx==0.27.2
+requests==2.32.3

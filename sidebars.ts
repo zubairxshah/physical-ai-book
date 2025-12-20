@@ -58,6 +58,26 @@ const sidebars: SidebarsConfig = {
       ],
       collapsed: false,
     },
+    {
+      type: 'category',
+      label: '🛠️ Part 5: Technical Modules',
+      items: [
+        'module1-ros2',
+        'module2-digital-twin',
+        'module3-nvidia-isaac',
+        'module4-vla',
+      ],
+      collapsed: false,
+    },
+    {
+      type: 'category',
+      label: '🤖 Part 6: AI Development Tools',
+      items: [
+        'claude',
+        'agents',
+      ],
+      collapsed: false,
+    },
   ],
 };
 
