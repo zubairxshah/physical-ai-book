@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
     // Chatbot API - Points to HF Space in production, local server in development
     const API_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:8003'
-        : 'https://zubairxshah-physical-ai-backend.hf.space';
+        : 'https://engisoft-physical-ai-backend.hf.space';
 
     let selectedText = '';
     let sessionId = localStorage.getItem('chatbot_session_id') || null;
