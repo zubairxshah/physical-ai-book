@@ -29,16 +29,6 @@
       "destination": "/api/translation.py"
     }
   ],
-  "env": {
-    "DATABASE_URL": "@database-url",
-    "BETTER_AUTH_SECRET": "@better-auth-secret",
-    "BETTER_AUTH_URL": "@better-auth-url",
-    "OPENAI_API_KEY": "@openai-api-key",
-    "QDRANT_URL": "@qdrant-url",
-    "QDRANT_API_KEY": "@qdrant-api-key",
-    "OPENROUTER_API_KEY": "@openrouter-api-key",
-    "NODE_ENV": "production"
-  },
   "build": {
     "env": {
       "NODE_ENV": "production"
@@ -68,4 +58,3 @@
     }
   ]
 }
-
