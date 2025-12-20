@@ -6,10 +6,10 @@ window.addEventListener('load', function() {
     console.log('✅ Initializing chatbot...');
 
     // Configuration
-    // Chatbot RAG API - Points to RAG backend server
+    // Chatbot API - Points to HF Space in production, local server in development
     const API_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:8003'
-        : 'https://physical-ai-book.vercel.app/api/rag';
+        : 'https://zubairxshah-physical-ai-backend.hf.space';
 
     let selectedText = '';
     let sessionId = localStorage.getItem('chatbot_session_id') || null;
