@@ -1,9 +1,28 @@
 # Physical AI and Humanoid Robotics
 ### Interactive AI-Powered Book with RAG Chatbot
 
-🤖 **Live Book**: [Your GitHub Pages URL]  
-🔗 **API Backend**: [Your Render/Railway URL]  
+🤖 **Live Book**: [https://physical-ai-book-xi.vercel.app](https://physical-ai-book-xi.vercel.app)
+🔗 **API Backend**: [https://huggingface.co/spaces/Engisoft/physical-ai-backend](https://huggingface.co/spaces/Engisoft/physical-ai-backend)
 📹 **Demo Video**: [Your video link]
+
+---
+
+## 🔐 Test Users
+
+Use these accounts to test the application:
+
+| Email | Password | Experience Level |
+|-------|----------|------------------|
+| `beginner@test.com` | `test123` | Beginner (no ROS, no AI) |
+| `intermediate@test.com` | `test123` | Intermediate (basic ROS, basic AI) |
+| `expert@test.com` | `test123` | Expert (expert ROS, expert AI) |
+
+**Features to test:**
+- Sign in at `/signin`
+- Personalized tooltips (hover over technical terms in chapters)
+- Urdu translation (toggle in Reading Tools)
+- Submit feedback at `/feedback`
+- AI Chatbot (bottom-right corner)
 
 ---
 
@@ -12,138 +31,108 @@
 This project was built for the GIAIC AI/Spec-Driven Online Hackathon. It demonstrates the future of interactive documentation by combining:
 
 - **AI-Generated Content**: Complete book written using Claude Code and Spec-Kit Plus
-- **Modern Documentation**: Built with Docusaurus 3.9
-- **Intelligent RAG Chatbot**: Answers questions about book content using OpenAI + Qdrant
+- **Modern Documentation**: Built with Docusaurus 3.6
+- **Intelligent RAG Chatbot**: Answers questions about book content using OpenRouter
 - **Text Selection Queries**: Users can highlight text and ask specific questions
+- **Personalization**: Experience-based tooltip definitions
+- **Translation**: Urdu translation with caching
 
 ---
 
 ## 🚀 Features
 
 ### Core Features
-✅ **Complete Book** - 18 chapters on Physical AI and Humanoid Robotics
-✅ **RAG Chatbot** - Retrieval-Augmented Generation using vector database
-✅ **Skills & Subagents** - 5 reusable Claude Code intelligence artifacts
-✅ **Authentication System** - Better-auth with user background questionnaires
-✅ **Content Personalization** - Experience-based tooltip definitions
-✅ **Urdu Translation** - GPT-4 powered translation with caching
-✅ **Source Citations** - Every answer includes relevant chapter references
-✅ **Responsive Design** - Works on desktop and mobile
+- **Complete Book** - 12 chapters on Physical AI and Humanoid Robotics
+- **RAG Chatbot** - AI-powered Q&A using OpenRouter
+- **Authentication System** - User registration with experience profiles
+- **Content Personalization** - Tooltips adapt to user's experience level
+- **Urdu Translation** - GPT-powered translation with intelligent caching
+- **Feedback System** - Registered users can submit feedback
+- **Hero Theme** - Beautiful purple/pink gradient design
+- **Responsive Design** - Works on desktop and mobile
 
 ### Technology Stack
 - **Frontend**: Docusaurus 3.6, React, TypeScript
-- **Backend**: Node.js (Express), FastAPI (Python)
-- **Auth**: Better-auth, PostgreSQL (Neon), Bcrypt
-- **AI/ML**: OpenAI GPT-4, text-embedding-3-small
-- **Vector DB**: Qdrant Cloud (free tier)
+- **Backend**: FastAPI (Python) on Hugging Face Spaces
+- **Auth**: Custom auth with PostgreSQL (Neon), Bcrypt
+- **AI/ML**: OpenRouter API (GPT-3.5/4)
 - **Database**: Neon Serverless PostgreSQL
-- **Deployment**: Vercel (frontend + serverless functions)
+- **Deployment**: Vercel (frontend), Hugging Face Spaces (backend)
 
 ---
 
-## ⚠️ IMPORTANT: Running the Project
-
-**This project requires MULTIPLE servers running simultaneously!**
-
-See **[START_SERVERS.md](START_SERVERS.md)** for complete setup instructions.
-
-**Quick Start:**
-```bash
-# Terminal 1 - Frontend
-npm start
-
-# Terminal 2 - Auth Server (Required for login/signup)
-node auth-server.js
-
-# Terminal 3 - Personalization API (Required for tooltips)
-python backend/personalization_api.py
-
-# Terminal 4 - Translation API (Required for Urdu translation)
-python backend/translation_api.py
-```
-
-**Note:** If you only run `npm start`, authentication and advanced features won't work!
-
----
-
-## 📚 Book Contents
-
-1. **Introduction to Physical AI** - What it is and why it matters
-2. **Core Technologies** - Computer vision, sensors, real-time systems
-3. **AI Models for Physical Systems** - RL, imitation learning, sim-to-real
-4. **Rise of Humanoid Robots** - History and current state
-5. **Mechanical Design** - Biomechanics, actuators, sensors
-6. **Control Systems** - Bipedal walking, manipulation, HRI
-7. **Perception** - Vision, tactile sensing, audio processing
-8. **Learning and Adaptation** - Self-supervised and continuous learning
-9. **Natural Language AI** - Vision-language models, instruction following
-10. **Real-World Applications** - Manufacturing, healthcare, domestic use
-11. **Challenges** - Safety, cost, technical and ethical issues
-12. **Future** - Predictions and emerging directions
-
----
-
-## 🛠️ Setup Instructions
+## 🛠️ Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - Python 3.11+
-- OpenAI API key
-- Qdrant Cloud account (free)
+- OpenRouter API key
 
-### Frontend Setup
+### Local Development
+
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/physical-ai-book.git
+git clone https://github.com/zubairxshah/physical-ai-book.git
 cd physical-ai-book
 
 # Install dependencies
 npm install
 
-# Start development server
+# Create .env.local with your keys (see .env.example)
+
+# Start all servers (4 terminals needed)
+# Terminal 1 - Frontend
 npm start
 
-# Build and deploy to GitHub Pages
-npm run deploy
+# Terminal 2 - Auth Server
+node auth-server.js
+
+# Terminal 3 - Personalization API
+python backend/personalization_api.py
+
+# Terminal 4 - Translation API
+python backend/translation_api.py
 ```
 
-### Backend Setup
+Or use the batch script:
 ```bash
-# Navigate to backend folder
-cd backend
+# Windows
+start-all-servers.bat
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file
-echo "OPENAI_API_KEY=your_key_here" > .env
-echo "QDRANT_URL=your_qdrant_url" >> .env
-echo "QDRANT_API_KEY=your_qdrant_key" >> .env
-
-# Run server
-uvicorn main:app --reload
+# Linux/Mac
+./start-all-servers.sh
 ```
 
 ---
 
-## 🤖 How the RAG Chatbot Works
+## 📚 Book Contents
 
-1. **Content Ingestion**: All book chapters are embedded using OpenAI's embedding model
-2. **Vector Storage**: Embeddings stored in Qdrant Cloud vector database
-3. **Query Processing**: User questions are converted to embeddings
-4. **Similarity Search**: Most relevant book sections retrieved
-5. **Answer Generation**: GPT-4 generates contextual answers with citations
-6. **Text Selection**: Highlighted text adds focused context to queries
+| Part | Chapters |
+|------|----------|
+| **Foundations** | 1. Introduction to Physical AI<br>2. Core Technologies<br>3. AI Models for Physical Systems |
+| **Humanoid Robotics** | 4. Rise of Humanoid Robots<br>5. Mechanical Design<br>6. Control Systems |
+| **Intelligence** | 7. Perception Systems<br>8. Learning and Adaptation<br>9. Natural Language AI |
+| **Applications** | 10. Real-World Applications<br>11. Challenges<br>12. Future of Physical AI |
+
+### Technical Modules
+- ROS 2 Deep Dive
+- Digital Twins (Gazebo & Isaac Sim)
+- Vision-Language-Action Models
+
+---
+
+## 🤖 How the Chatbot Works
+
+1. **User Query**: Type a question or select text and ask
+2. **Context Building**: System adds Physical AI domain knowledge
+3. **AI Response**: OpenRouter generates contextual answers
+4. **Session Memory**: Chat history maintained per session
 
 ### Example Queries
 - "What is Physical AI?"
 - "How do humanoid robots maintain balance?"
-- *[Select text about computer vision]* "Explain this in simpler terms"
-- "What are the main challenges in robotics?"
+- *[Select text]* "Explain this in simpler terms"
+- "What are VLA models?"
 
 ---
 
@@ -151,105 +140,89 @@ uvicorn main:app --reload
 
 ```
 physical-ai-book/
-├── docs/                    # Book chapters (Markdown)
-│   ├── intro.md
-│   ├── chapter1.md
-│   └── ...
-├── src/                     # React components
-├── static/
-│   └── chatbot-widget.js   # Chatbot UI
-├── backend/                 # FastAPI backend
-│   ├── main.py             # RAG implementation
+├── docs/                    # Book chapters (MDX with tooltips)
+├── src/
+│   ├── components/          # React components
+│   │   ├── Auth/           # SignIn/SignUp forms
+│   │   ├── FloatingToolbar.tsx
+│   │   └── PersonalizedTooltip.tsx
+│   ├── context/            # React context (Personalization)
+│   ├── pages/              # Custom pages (feedback, signin, signup)
+│   └── css/custom.css      # Hero theme styling
+├── backend/                 # Local development servers
+├── huggingface-space/      # HF Space deployment files
+│   ├── app.py              # Combined API
+│   ├── Dockerfile
 │   └── requirements.txt
-├── docusaurus.config.js    # Docusaurus configuration
-├── package.json
-└── README.md
+├── static/
+│   └── chatbot-widget-v3.js
+└── docusaurus.config.ts
 ```
-
----
-
-## 🎥 Demo Video
-
-[Watch the demo](YOUR_VIDEO_LINK) showing:
-1. Book navigation and content
-2. General chatbot queries
-3. Text selection feature
-4. Source citations
-5. Mobile responsiveness
-
----
-
-## 🏆 Bonus Features
-
-### Claude Code Integration
-- Used Claude Code for rapid content generation
-- Spec-driven development approach
-- Iterative refinement of chapters
-
-### Subagents & Skills (Implemented)
-
-**3 Reusable Skills** - Domain-specific intelligence artifacts:
-- **Content Generation Skill** - Generates educational technical content following book style guidelines
-- **RAG Query Testing Skill** - Validates chatbot accuracy and source attribution
-- **Robotics Code Generator Skill** - Creates production-quality ROS 2, control, and vision code
-
-**2 Specialized Subagents** - Autonomous task executors:
-- **Technical Reviewer Subagent** - Reviews code and content for accuracy, safety, and best practices
-- **Documentation Generator Subagent** - Auto-generates API docs, setup guides, and troubleshooting docs
-
-All skills and subagents are located in `.claude/skills/` and `.claude/subagents/` directories with comprehensive documentation and usage examples.
-
----
-
-## 🧪 Testing
-
-The chatbot has been tested with:
-- ✅ General knowledge questions
-- ✅ Specific technical queries
-- ✅ Text selection queries
-- ✅ Multi-chapter context
-- ✅ Source citation accuracy
 
 ---
 
 ## 🚀 Deployment
 
-### Frontend (GitHub Pages)
-```bash
-npm run deploy
-```
+### Frontend (Vercel)
+- Auto-deploys from GitHub `main` branch
+- URL: https://physical-ai-book-xi.vercel.app
 
-### Backend (Render.com)
-1. Connect GitHub repository
-2. Set environment variables
-3. Deploy automatically on push
+### Backend (Hugging Face Spaces)
+- Docker-based deployment
+- URL: https://engisoft-physical-ai-backend.hf.space
+
+### Environment Variables
+
+**Vercel:**
+- `NODE_ENV=production`
+
+**HF Space Secrets:**
+- `OPENROUTER_API_KEY`
+- `DATABASE_URL`
+- `BETTER_AUTH_SECRET`
 
 ---
 
-## 📊 Evaluation Criteria Met
+## 🏆 Features Implemented
 
-✅ **AI/Spec-Driven Development** - Built using Claude Code and Spec-Kit Plus  
-✅ **Docusaurus Book** - Complete 12-chapter book deployed to GitHub Pages  
-✅ **RAG Chatbot** - Fully functional with OpenAI + Qdrant  
-✅ **Text Selection** - Highlighted text can be queried  
-✅ **Integration** - Chatbot embedded in book website  
-✅ **Documentation** - Comprehensive README and code comments  
+### Authentication
+- User registration with experience profiles
+- Session-based authentication
+- Protected feedback submission
+
+### Personalization
+- Tooltips adapt to user's:
+  - Programming experience
+  - ROS familiarity
+  - AI/ML background
+
+### Translation
+- English to Urdu translation
+- Intelligent caching (saves API costs)
+- Preserves technical terms
+
+### Feedback System
+- Only registered users can submit
+- Multiple feedback types (bug, suggestion, feature, etc.)
+- Star rating system
+- Stored in PostgreSQL
 
 ---
 
 ## 👥 Credits
 
-**Student**: [Your Name]  
-**Course**: GIAIC Thursday Evening AI  
-**Hackathon**: AI/Spec-Driven Online Hackathon 1  
-**Date**: December 2024  
+**Developer**: Zubair Shah
+**Course**: GIAIC Thursday Evening AI
+**Hackathon**: AI/Spec-Driven Online Hackathon 1
+**Date**: December 2024
 
 **Technologies Used**:
 - Claude Code (AI pair programmer)
 - Docusaurus (documentation framework)
-- OpenAI GPT-4 (chat completion)
-- Qdrant (vector database)
-- FastAPI (backend framework)
+- OpenRouter (LLM API gateway)
+- Hugging Face Spaces (backend hosting)
+- Neon (PostgreSQL database)
+- Vercel (frontend hosting)
 
 ---
 
@@ -259,20 +232,10 @@ MIT License - feel free to use this code for learning and projects!
 
 ---
 
-## 🙏 Acknowledgments
-
-- GIAIC faculty and coordinators
-- Anthropic's Claude for development assistance
-- OpenAI for GPT-4 and embeddings API
-- Qdrant for vector database
-- Meta for Docusaurus framework
-
----
-
 ## 📧 Contact
 
 For questions or feedback:
-- GitHub: [@zubairxshah]
+- GitHub: [@zubairxshah](https://github.com/zubairxshah)
 - Email: engisoft@yahoo.com
 
 ---
