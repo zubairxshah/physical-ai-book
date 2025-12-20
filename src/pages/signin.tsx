@@ -5,12 +5,10 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 
 export default function SigninPage() {
   return (
-    <BrowserOnly>
-      {() => (
-        <Layout title="Sign In" description="Sign in to your Physical AI Book account">
-          <SigninForm />
-        </Layout>
-      )}
-    </BrowserOnly>
+    <Layout title="Sign In" description="Sign in to your Physical AI Book account">
+      <BrowserOnly fallback={<div style={{minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Loading...</div>}>
+        {() => <SigninForm />}
+      </BrowserOnly>
+    </Layout>
   );
 }

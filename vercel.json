@@ -3,11 +3,17 @@
   "outputDirectory": "build",
   "installCommand": "npm install --force",
   "framework": "docusaurus",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "build": {
     "env": {
       "NODE_ENV": "production"
     }
   },
+  "rewrites": [
+    { "source": "/signin", "destination": "/signin.html" },
+    { "source": "/signup", "destination": "/signup.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
