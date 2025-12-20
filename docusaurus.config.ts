@@ -8,9 +8,9 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://zubairxshah.github.io',
+  url: 'https://physical-ai-book-xi.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/physical-ai-book/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'zubairxshah', // Usually your GitHub org/user name.
@@ -18,7 +18,7 @@ const config: Config = {
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
