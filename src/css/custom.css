@@ -1,30 +1,267 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Physical AI Book - Custom Theme
+ * Matching hero page gradient style
  */
 
-/* You can override the default Infima variables here. */
+/* Hero gradient colors */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Primary purple from hero gradient */
+  --ifm-color-primary: #667eea;
+  --ifm-color-primary-dark: #5a6fd6;
+  --ifm-color-primary-darker: #4e60c2;
+  --ifm-color-primary-darkest: #3d4da0;
+  --ifm-color-primary-light: #7a8eee;
+  --ifm-color-primary-lighter: #8e9ef2;
+  --ifm-color-primary-lightest: #b3bef7;
+
+  /* Secondary purple */
+  --ifm-color-secondary: #764ba2;
+
+  /* Accent pink */
+  --ifm-color-accent: #f093fb;
+
+  /* Code styling */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(102, 126, 234, 0.15);
+
+  /* Navbar styling */
+  --ifm-navbar-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --ifm-navbar-link-color: white;
+  --ifm-navbar-link-hover-color: #f093fb;
+
+  /* Links */
+  --ifm-link-color: #667eea;
+  --ifm-link-hover-color: #764ba2;
+
+  /* Hero gradient for reuse */
+  --hero-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --hero-gradient-simple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark mode */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #8e9ef2;
+  --ifm-color-primary-dark: #7a8eee;
+  --ifm-color-primary-darker: #667eea;
+  --ifm-color-primary-darkest: #5a6fd6;
+  --ifm-color-primary-light: #a2aef5;
+  --ifm-color-primary-lighter: #b6bef8;
+  --ifm-color-primary-lightest: #cacefb;
+
+  --docusaurus-highlighted-code-line-bg: rgba(102, 126, 234, 0.3);
+  --ifm-link-color: #8e9ef2;
+  --ifm-link-hover-color: #f093fb;
+}
+
+/* Navbar styling */
+.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+.navbar__title {
+  color: white !important;
+}
+
+.navbar__link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+}
+
+.navbar__link:hover {
+  color: #f093fb !important;
+}
+
+.navbar__link--active {
+  color: white !important;
+}
+
+/* Navbar logo */
+.navbar__logo {
+  filter: brightness(0) invert(1);
+}
+
+/* Search bar styling */
+.navbar__search-input {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+.navbar__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Sidebar styling */
+.menu__link {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  color: #667eea;
+}
+
+.menu__link--active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+/* Table of contents */
+.table-of-contents__link:hover {
+  color: #667eea;
+}
+
+.table-of-contents__link--active {
+  color: #764ba2;
+  font-weight: 600;
+}
+
+/* Buttons */
+.button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.button--primary:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Code blocks */
+.prism-code {
+  border-radius: 8px;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 0 8px 8px 0;
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 8px;
+  border-left-width: 4px;
+}
+
+.admonition-note {
+  border-left-color: #667eea;
+}
+
+.admonition-tip {
+  border-left-color: #764ba2;
+}
+
+.admonition-info {
+  border-left-color: #8e9ef2;
+}
+
+/* Footer */
+.footer {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.footer__title {
+  color: #8e9ef2;
+}
+
+.footer__link-item:hover {
+  color: #f093fb;
+}
+
+/* Doc page headers */
+.markdown h1 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pagination */
+.pagination-nav__link {
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* Dark mode scrollbar */
+[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+/* Card hover effects */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+/* Selection color */
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: inherit;
+}
+
+/* Mobile menu button */
+.navbar__toggle {
+  color: white !important;
+}
+
+/* Breadcrumbs */
+.breadcrumbs__link {
+  color: #667eea;
+}
+
+.breadcrumbs__link:hover {
+  color: #764ba2;
+}
+
+/* Badge styling */
+.badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+/* Tabs */
+.tabs__item--active {
+  border-bottom-color: #667eea !important;
+  color: #667eea;
+}
+
+.tabs__item:hover {
+  color: #764ba2;
 }

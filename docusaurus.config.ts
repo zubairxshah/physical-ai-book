@@ -65,9 +65,9 @@ const config: Config = {
           label: '📚 Book',
         },
         {
-          to: '/chapter1',
+          to: '/feedback',
           position: 'left',
-          label: 'Start Reading',
+          label: '💬 Feedback',
         },
         {
           href: 'https://github.com/zubairxshah/physical-ai-book',

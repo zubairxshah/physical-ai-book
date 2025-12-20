@@ -141,6 +141,22 @@ class UserResponse(BaseModel):
     rosFamiliarity: str
     aiMlBackground: str
 
+# Feedback Models
+class FeedbackRequest(BaseModel):
+    user_id: str
+    user_email: str
+    feedback_type: str = "suggestion"
+    message: str
+    rating: int = 5
+
+class FeedbackResponse(BaseModel):
+    id: str
+    user_email: str
+    feedback_type: str
+    message: str
+    rating: int
+    created_at: str
+
 # ============================================================================
 # Sessions Storage
 # ============================================================================
@@ -760,6 +776,94 @@ async def get_session(request: Request):
         return {"user": None}
 
     return {"user": auth_sessions[session_token]}
+
+
+# ============================================================================
+# API Endpoints - Feedback
+# ============================================================================
+
+@app.post("/feedback", response_model=FeedbackResponse)
+async def submit_feedback(request: FeedbackRequest):
+    """Submit user feedback. Requires authenticated user."""
+    feedback_id = secrets.token_hex(16)
+    created_at = datetime.now().isoformat()
+
+    if SessionLocal:
+        try:
+            session = SessionLocal()
+            from sqlalchemy import text
+
+            # Insert feedback
+            query = text("""
+                INSERT INTO feedback (id, user_id, user_email, feedback_type, message, rating, created_at)
+                VALUES (:id, :user_id, :user_email, :feedback_type, :message, :rating, NOW())
+            """)
+            session.execute(query, {
+                "id": feedback_id,
+                "user_id": request.user_id,
+                "user_email": request.user_email,
+                "feedback_type": request.feedback_type,
+                "message": request.message,
+                "rating": request.rating
+            })
+            session.commit()
+            session.close()
+
+            logger.info(f"Feedback submitted by {request.user_email}")
+
+        except Exception as e:
+            logger.error(f"Feedback submission error: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        # In-memory fallback for demo
+        logger.info(f"Feedback (in-memory): {request.user_email} - {request.feedback_type}")
+
+    return FeedbackResponse(
+        id=feedback_id,
+        user_email=request.user_email,
+        feedback_type=request.feedback_type,
+        message=request.message,
+        rating=request.rating,
+        created_at=created_at
+    )
+
+
+@app.get("/feedback")
+async def list_feedback():
+    """List all feedback (admin endpoint)."""
+    if not SessionLocal:
+        return {"feedback": [], "note": "Database not configured"}
+
+    try:
+        session = SessionLocal()
+        from sqlalchemy import text
+
+        query = text("""
+            SELECT id, user_email, feedback_type, message, rating, created_at
+            FROM feedback
+            ORDER BY created_at DESC
+            LIMIT 100
+        """)
+        results = session.execute(query).fetchall()
+        session.close()
+
+        feedback_list = [
+            {
+                "id": row[0],
+                "user_email": row[1],
+                "feedback_type": row[2],
+                "message": row[3],
+                "rating": row[4],
+                "created_at": str(row[5])
+            }
+            for row in results
+        ]
+
+        return {"total": len(feedback_list), "feedback": feedback_list}
+
+    except Exception as e:
+        logger.error(f"Error listing feedback: {e}")
+        return {"feedback": [], "error": str(e)}
 
 
 # ============================================================================
