@@ -4,8 +4,9 @@ Combines: Chatbot, Personalization, and Translation APIs
 Runs on port 7860 (HF Space default)
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -13,6 +14,9 @@ import sys
 import hashlib
 import logging
 import httpx
+import secrets
+import bcrypt
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 # Fix Windows console encoding
@@ -52,6 +56,7 @@ app.add_middleware(
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+AUTH_SECRET = os.getenv("BETTER_AUTH_SECRET", secrets.token_hex(32))
 
 # ============================================================================
 # Database Setup (Optional - for caching)
@@ -115,11 +120,33 @@ class TranslationResponse(BaseModel):
     tokens_used: int
     model_used: str
 
+# Auth Models
+class SignUpRequest(BaseModel):
+    email: str
+    password: str
+    name: str = ""
+    programmingExperience: str = "beginner"
+    rosFamiliarity: str = "none"
+    aiMlBackground: str = "none"
+
+class SignInRequest(BaseModel):
+    email: str
+    password: str
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    name: str
+    programmingExperience: str
+    rosFamiliarity: str
+    aiMlBackground: str
+
 # ============================================================================
-# Chat Sessions Storage
+# Sessions Storage
 # ============================================================================
 
 chat_sessions = {}
+auth_sessions = {}  # session_token -> user_data
 
 # ============================================================================
 # Helper Functions
@@ -534,6 +561,205 @@ async def translation_stats():
         }
     except Exception as e:
         return {"error": str(e)}
+
+
+# ============================================================================
+# API Endpoints - Authentication
+# ============================================================================
+
+@app.post("/sign-up")
+async def sign_up(request: SignUpRequest, response: Response):
+    """Register a new user."""
+    if not SessionLocal:
+        # In-memory fallback for demo
+        user_id = secrets.token_hex(16)
+        session_token = secrets.token_hex(32)
+
+        user_data = {
+            "id": user_id,
+            "email": request.email,
+            "name": request.name or request.email.split("@")[0],
+            "programmingExperience": request.programmingExperience,
+            "rosFamiliarity": request.rosFamiliarity,
+            "aiMlBackground": request.aiMlBackground
+        }
+
+        auth_sessions[session_token] = user_data
+
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            max_age=60 * 60 * 24 * 7  # 7 days
+        )
+
+        return {"user": user_data, "token": session_token}
+
+    try:
+        session = SessionLocal()
+        from sqlalchemy import text
+
+        # Check if user exists
+        check_query = text("SELECT id FROM users WHERE email = :email")
+        existing = session.execute(check_query, {"email": request.email}).fetchone()
+
+        if existing:
+            session.close()
+            raise HTTPException(status_code=400, detail="Email already registered")
+
+        # Hash password
+        password_hash = bcrypt.hashpw(request.password.encode(), bcrypt.gensalt()).decode()
+        user_id = secrets.token_hex(16)
+
+        # Insert user
+        insert_query = text("""
+            INSERT INTO users (id, email, password_hash, name, programming_experience, ros_familiarity, ai_ml_background, created_at)
+            VALUES (:id, :email, :password_hash, :name, :prog, :ros, :ai, NOW())
+        """)
+        session.execute(insert_query, {
+            "id": user_id,
+            "email": request.email,
+            "password_hash": password_hash,
+            "name": request.name or request.email.split("@")[0],
+            "prog": request.programmingExperience,
+            "ros": request.rosFamiliarity,
+            "ai": request.aiMlBackground
+        })
+        session.commit()
+        session.close()
+
+        # Create session
+        session_token = secrets.token_hex(32)
+        user_data = {
+            "id": user_id,
+            "email": request.email,
+            "name": request.name or request.email.split("@")[0],
+            "programmingExperience": request.programmingExperience,
+            "rosFamiliarity": request.rosFamiliarity,
+            "aiMlBackground": request.aiMlBackground
+        }
+        auth_sessions[session_token] = user_data
+
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            max_age=60 * 60 * 24 * 7
+        )
+
+        return {"user": user_data, "token": session_token}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Sign up error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/sign-in")
+async def sign_in(request: SignInRequest, response: Response):
+    """Sign in an existing user."""
+    if not SessionLocal:
+        # In-memory fallback - accept any credentials for demo
+        user_id = secrets.token_hex(16)
+        session_token = secrets.token_hex(32)
+
+        user_data = {
+            "id": user_id,
+            "email": request.email,
+            "name": request.email.split("@")[0],
+            "programmingExperience": "intermediate",
+            "rosFamiliarity": "basic",
+            "aiMlBackground": "basic"
+        }
+
+        auth_sessions[session_token] = user_data
+
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            max_age=60 * 60 * 24 * 7
+        )
+
+        return {"user": user_data, "token": session_token}
+
+    try:
+        session = SessionLocal()
+        from sqlalchemy import text
+
+        # Find user
+        query = text("""
+            SELECT id, email, password_hash, name, programming_experience, ros_familiarity, ai_ml_background
+            FROM users WHERE email = :email
+        """)
+        result = session.execute(query, {"email": request.email}).fetchone()
+        session.close()
+
+        if not result:
+            raise HTTPException(status_code=401, detail="Invalid email or password")
+
+        # Verify password
+        if not bcrypt.checkpw(request.password.encode(), result[2].encode()):
+            raise HTTPException(status_code=401, detail="Invalid email or password")
+
+        # Create session
+        session_token = secrets.token_hex(32)
+        user_data = {
+            "id": result[0],
+            "email": result[1],
+            "name": result[3] or result[1].split("@")[0],
+            "programmingExperience": result[4] or "beginner",
+            "rosFamiliarity": result[5] or "none",
+            "aiMlBackground": result[6] or "none"
+        }
+        auth_sessions[session_token] = user_data
+
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            max_age=60 * 60 * 24 * 7
+        )
+
+        return {"user": user_data, "token": session_token}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Sign in error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/sign-out")
+async def sign_out(request: Request, response: Response):
+    """Sign out the current user."""
+    session_token = request.cookies.get("session_token")
+
+    if session_token and session_token in auth_sessions:
+        del auth_sessions[session_token]
+
+    response.delete_cookie(key="session_token")
+    return {"success": True}
+
+
+@app.get("/session")
+async def get_session(request: Request):
+    """Get current user session."""
+    session_token = request.cookies.get("session_token")
+
+    if not session_token or session_token not in auth_sessions:
+        return {"user": None}
+
+    return {"user": auth_sessions[session_token]}
 
 
 # ============================================================================
