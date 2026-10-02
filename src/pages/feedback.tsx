@@ -5,7 +5,7 @@ import styles from './feedback.module.css';
 
 const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost'
   ? 'http://localhost:8003'
-  : 'https://engisoft-physical-ai-backend.hf.space';
+  : '/api';
 
 function FeedbackForm() {
   const [user, setUser] = useState<any>(null);

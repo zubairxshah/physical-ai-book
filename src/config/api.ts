@@ -1,8 +1,8 @@
 // API Configuration
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-// Hugging Face Space URL
-const HF_SPACE_URL = 'https://engisoft-physical-ai-backend.hf.space';
+// Hugging Face Space, proxied through Vercel (see vercel.json) so auth cookies are same-origin
+const HF_SPACE_URL = '/api';
 
 // All APIs point to HF Space in production
 export const AUTH_API_URL = IS_PRODUCTION

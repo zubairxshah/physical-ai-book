@@ -12,7 +12,8 @@
   },
   "rewrites": [
     { "source": "/signin", "destination": "/signin.html" },
-    { "source": "/signup", "destination": "/signup.html" }
+    { "source": "/signup", "destination": "/signup.html" },
+    { "source": "/api/:path*", "destination": "https://engisoft-physical-ai-backend.hf.space/:path*" }
   ],
   "headers": [
     {
