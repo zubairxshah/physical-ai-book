@@ -70,7 +70,8 @@ if DATABASE_URL:
     try:
         from sqlalchemy import create_engine, text
         from sqlalchemy.orm import sessionmaker
-        db_engine = create_engine(DATABASE_URL)
+        # pre_ping replaces connections Neon closed while idle (otherwise the first query after idle 500s)
+        db_engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_recycle=300)
         SessionLocal = sessionmaker(bind=db_engine)
         logger.info("Database connected successfully")
     except Exception as e:
