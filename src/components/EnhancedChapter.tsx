@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { TRANSLATION_API_URL } from '../config/api';
+import { translateElementToUrdu } from '../utils/translateToUrdu';
 import ChapterControls from './ChapterControls';
 
 interface EnhancedChapterProps {
@@ -48,39 +48,17 @@ export default function EnhancedChapter({
     setTranslationError('');
 
     try {
-      // Extract text content from the chapter
-      const chapterElement = document.querySelector(`[data-chapter-id="${chapterId}"]`);
-      const contentToTranslate = chapterElement?.textContent || '';
-
-      console.log('Translation request:', {
-        chapterId,
-        contentLength: contentToTranslate.length,
-        contentPreview: contentToTranslate.substring(0, 100)
-      });
-
-      const response = await fetch(`${TRANSLATION_API_URL}/translate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chapter_id: chapterId,
-          content: contentToTranslate,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Translation API error:', errorData);
-        throw new Error(`Translation failed: ${errorData.detail || response.statusText}`);
+      const chapterElement = document.querySelector(`[data-chapter-id="${chapterId}"]`) as HTMLElement | null;
+      if (!chapterElement) {
+        throw new Error('Could not find chapter content');
       }
 
-      const data = await response.json();
-      setTranslatedContent(data.translated_content);
+      // Safe to render as HTML: structure is the original chapter, translations are inserted as text
+      setTranslatedContent(await translateElementToUrdu(chapterElement, chapterId));
       setTranslationEnabled(true);
     } catch (error) {
       console.error('Translation error:', error);
-      setTranslationError(error instanceof Error ? error.message : 'Translation failed');
+      setTranslationError(`Translation failed: ${error instanceof Error ? error.message : 'unknown error'}`);
     } finally {
       setIsTranslating(false);
     }

@@ -56,6 +56,7 @@ app.add_middleware(
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")  # required to list feedback
 AUTH_SECRET = os.getenv("BETTER_AUTH_SECRET", secrets.token_hex(32))
 
 # ============================================================================
@@ -829,8 +830,12 @@ async def submit_feedback(request: FeedbackRequest):
 
 
 @app.get("/feedback")
-async def list_feedback():
-    """List all feedback (admin endpoint)."""
+async def list_feedback(request: Request):
+    """List all feedback (admin endpoint). Requires `Authorization: Bearer <ADMIN_TOKEN>`."""
+    auth = request.headers.get("authorization", "")
+    if not ADMIN_TOKEN or not secrets.compare_digest(auth, f"Bearer {ADMIN_TOKEN}"):
+        raise HTTPException(status_code=403, detail="Admin token required")
+
     if not SessionLocal:
         return {"feedback": [], "note": "Database not configured"}
 

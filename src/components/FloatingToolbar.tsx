@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { usePersonalizationSafe } from '../context/PersonalizationContext';
-import { TRANSLATION_API_URL } from '../config/api';
+import { translateElementToUrdu } from '../utils/translateToUrdu';
 import styles from './FloatingToolbar.module.css';
 
 interface FloatingToolbarProps {
@@ -69,41 +69,19 @@ export default function FloatingToolbar({ onClose }: FloatingToolbarProps) {
       const originalContent = contentArea.innerHTML;
       contentCache[chapterId] = { original: originalContent, translated: '' };
 
-      const contentToTranslate = contentArea.textContent || '';
+      const translatedHtml = await translateElementToUrdu(contentArea, chapterId);
 
-      const response = await fetch(`${TRANSLATION_API_URL}/translate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chapter_id: chapterId,
-          content: contentToTranslate.substring(0, 8000),
-        }),
-      });
+      // Cache the translated content
+      contentCache[chapterId].translated = translatedHtml;
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(`Translation failed: ${errorData.detail || response.statusText}`);
-      }
-
-      const data = await response.json();
-
-      if (data.translated_content) {
-        // Cache the translated content
-        contentCache[chapterId].translated = data.translated_content;
-
-        // Apply translation to the page
-        contentArea.innerHTML = data.translated_content;
-        contentArea.style.direction = 'rtl';
-        contentArea.style.textAlign = 'right';
-        toggleTranslation();
-      } else {
-        throw new Error('No translated content received');
-      }
+      // Apply translation to the page
+      contentArea.innerHTML = translatedHtml;
+      contentArea.style.direction = 'rtl';
+      contentArea.style.textAlign = 'right';
+      toggleTranslation();
     } catch (error) {
       console.error('Translation error:', error);
-      setTranslationError(error instanceof Error ? error.message : 'Translation failed');
+      setTranslationError(`Translation failed: ${error instanceof Error ? error.message : 'unknown error'}`);
       // Restore original if translation failed
       if (contentCache[chapterId]?.original) {
         contentArea.innerHTML = contentCache[chapterId].original;
