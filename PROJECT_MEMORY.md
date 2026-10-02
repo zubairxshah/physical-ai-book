@@ -1,6 +1,6 @@
 # Project Memory - Physical AI & Humanoid Robotics Book
 
-**Last Updated**: 2025-12-21 (Session 3 - Theme, Feedback & Deployment)
+**Last Updated**: 2026-10-03 (Session 4 - Live Testing & Bug Fixes)
 **Project Status**: Fully Deployed & Functional
 **Current Phase**: Production Ready
 
@@ -166,6 +166,43 @@ CREATE TABLE urdu_translations (
 
 ---
 
+## Recent Changes (Session 4 - 2026-10-03)
+
+Live browser testing (Playwright) found that sign-in and all logged-in
+features were broken in real browsers, even though curl tests passed.
+
+### Fixed (frontend - live on Vercel)
+- **Auth blocked by CORS**: the HF Spaces proxy answers CORS preflights itself
+  and omits `Access-Control-Allow-Credentials`, so browsers blocked every
+  `credentials: 'include'` request. Fix: `vercel.json` rewrites `/api/:path*`
+  to the HF Space, and `src/config/api.ts` / `feedback.tsx` call `/api`
+  (same-origin). The chatbot widget still calls the HF Space directly (no cookies).
+- **Urdu translation lost structure and was truncated at 8000 chars**: new
+  `src/utils/translateToUrdu.ts` translates each heading/paragraph/list
+  item/table cell in batches of ~1500 chars using `[n]` line markers and
+  inserts results as text (no LLM HTML injection). Used by
+  `FloatingToolbar.tsx` and `EnhancedChapter.tsx`.
+- **Dead script**: removed `src/theme/Root.tsx` loader for deleted
+  `chatbot-widget-v2.js` (404).
+
+### Fixed in code - NOT YET DEPLOYED (needs manual upload to HF Space)
+- `huggingface-space/app.py`:
+  - `GET /feedback` now requires `Authorization: Bearer <ADMIN_TOKEN>`
+    (was public). Needs new HF secret `ADMIN_TOKEN`.
+  - `create_engine(..., pool_pre_ping=True, pool_recycle=300)` fixes the
+    intermittent 500 on the first sign-in after idle (Neon closes idle connections).
+- Steps: add `ADMIN_TOKEN` secret in Space Settings -> upload `app.py` via
+  Files tab -> wait for "Running" -> `/api/feedback` should return 403 without token.
+
+### Notes
+- Reading Tools panel is a hover dropdown on the navbar "Tools" button.
+- In Urdu mode, inline links/tooltips inside translated blocks become plain text.
+- First visit after idle is slow (~10s) because the free HF Space sleeps.
+- Ideas for later: keep inline formatting in translation, translate nested
+  `li` text that contains sub-lists, update stale status in CLAUDE.md.
+
+---
+
 ## Recent Changes (Session 3 - 2025-12-21)
 
 ### Theme Updates
@@ -209,6 +246,7 @@ CREATE TABLE urdu_translations (
 - `DATABASE_URL`
 - `BETTER_AUTH_SECRET`
 - `BETTER_AUTH_URL`
+- `ADMIN_TOKEN` (protects `GET /feedback`; add before uploading new app.py)
 
 ---
 
@@ -256,4 +294,4 @@ python backend/chatbot_simple.py
 ---
 
 **End of Memory File**
-*Last updated: 2025-12-21*
+*Last updated: 2026-10-03*
